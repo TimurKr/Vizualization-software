@@ -4,7 +4,7 @@ from math import cos, sin
 
 radius = 5
 height = 5
-num_points = 100
+num_points = 4
 
 
 def generate_ihlan(n=num_points, r=radius, h=height):
