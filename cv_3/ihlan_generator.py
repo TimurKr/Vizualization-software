@@ -4,7 +4,7 @@ from math import cos, sin
 
 radius = 5
 height = 5
-num_points = 4
+num_points = 6
 
 
 def generate_ihlan(n=num_points, r=radius, h=height):
@@ -53,13 +53,14 @@ def export_vtk(points, filename):
     file.write(f'2 {i+1} {1}\n')
 
     # Write side polygons
-    file.write(f'POLYGONS {len(points)} {len(points) * 4}\n')
+    file.write(f'POLYGONS {len(points)} {(len(points)-1) * 4 + len(points)}\n')
     for i in range(1, len(points)-1):
         file.write(f'3 {0} {i} {i+1}\n')
     file.write(f'3 {0} {1} {i+1}\n')
 
     # Wirte the base polygon
-    file.write(f'POLYGONS 1 {len(points)}\n{len(points)-1}')
+    # file.write(f'POLYGONS 1 {len(points)}\n{len(points)-1}')
+    file.write(f'{len(points)-1}')
     for i in range(1, len(points)):
         file.write(f' {i}')
 
