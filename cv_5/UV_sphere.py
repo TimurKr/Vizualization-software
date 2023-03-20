@@ -69,19 +69,19 @@ def export_vtk(points, filename):
             file.write(f'{point.x} {point.y} {point.z}\n')
 
     # Count the number of triangles
-    num_triangles = num_parallels * num_meridians * 2 + num_meridians * 2
+    num_triangles = 2 * (len(points) - 2) * len(points[1])
 
     # Write triangles
-    file.write(f'POLYGONS {num_triangles} {num_triangles*3}\n')
+    file.write(f'POLYGONS {num_triangles} {num_triangles*4}\n')
 
     # Write the top row
     for i, row in enumerate(points):
+        # Skip the top point
         if i == 0:
             continue
 
-        if i == len(points)-1:
-            continue
-
+        # Something special if generating the first row, because the first
+        # row is just one point
         if i == 1:
             for j, point in enumerate(row[:-1]):
                 file.write(
@@ -90,6 +90,17 @@ def export_vtk(points, filename):
                 f'3 {points[i][j+1].i} {points[i][0].i} {points[i-1][0].i}\n')
             continue
 
+        # Something special if generating the last row, because the last
+        # row is just one point
+        if i == len(points)-1:
+            for j, point in enumerate(points[i-1][:-1]):
+                file.write(
+                    f'3 {points[i-1][j].i} {points[i][0].i} {points[i-1][j+1].i}\n')
+            file.write(
+                f'3 {points[i-1][j].i} {points[i][0].i} {points[i-1][0].i}\n')
+            continue
+
+        # If you got this far, just the normal case
         for j, point in enumerate(row[:-1]):
             file.write(
                 f'3 {points[i][j].i} {points[i][j+1].i} {points[i-1][j+1].i}\n')
@@ -99,10 +110,6 @@ def export_vtk(points, filename):
             f'3 {points[i][j+1].i} {points[i][0].i} {points[i-1][0].i}\n')
         file.write(
             f'3 {points[i][j+1].i} {points[i-1][0].i} {points[i-1][j+1].i}\n')
-
-    # Write the middle rows
-
-    # Write the bottom row
 
     file.close()
 
