@@ -79,15 +79,26 @@ def export_vtk(points, filename):
         if i == 0:
             continue
 
+        if i == len(points)-1:
+            continue
+
         if i == 1:
             for j, point in enumerate(row[:-1]):
                 file.write(
                     f'3 {points[i][j].i} {points[i][j+1].i} {points[i-1][0].i}\n')
             file.write(
                 f'3 {points[i][j+1].i} {points[i][0].i} {points[i-1][0].i}\n')
+            continue
 
-        # for j, point in enumerate(row):
-        #     file.write(f'3 {point.i} {points[i-1][j+1].i} {points[i-1][j].i}\n')
+        for j, point in enumerate(row[:-1]):
+            file.write(
+                f'3 {points[i][j].i} {points[i][j+1].i} {points[i-1][j+1].i}\n')
+            file.write(
+                f'3 {points[i][j].i} {points[i-1][j+1].i} {points[i-1][j].i}\n')
+        file.write(
+            f'3 {points[i][j+1].i} {points[i][0].i} {points[i-1][0].i}\n')
+        file.write(
+            f'3 {points[i][j+1].i} {points[i-1][0].i} {points[i-1][j+1].i}\n')
 
     # Write the middle rows
 
