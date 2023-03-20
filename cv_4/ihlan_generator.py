@@ -83,7 +83,7 @@ def export_vtk(points, filename):
 
     for i in range(len(points)):
         file.write(f'\n{i}.0')
-    file.write(f'\nLOOKUP_TABLE green_table 6')
+    file.write(f'\nLOOKUP_TABLE green_table {len(points)}')
 
     for i in range(len(points)):
         file.write(f'\n0.0 {round(i/len(points), 3)} 0.0 1.0')
