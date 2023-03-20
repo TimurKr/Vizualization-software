@@ -18,8 +18,8 @@ class Point:
 center = (0, 0)
 radius = 5
 
-num_meridians = 4
-num_parallels = 5
+num_meridians = 10
+num_parallels = 10
 
 
 def generate_sphere_points():
@@ -97,7 +97,7 @@ def export_vtk(points, filename):
                 file.write(
                     f'3 {points[i-1][j].i} {points[i][0].i} {points[i-1][j+1].i}\n')
             file.write(
-                f'3 {points[i-1][j].i} {points[i][0].i} {points[i-1][0].i}\n')
+                f'3 {points[i-1][j+1].i} {points[i][0].i} {points[i-1][0].i}\n')
             continue
 
         # If you got this far, just the normal case
