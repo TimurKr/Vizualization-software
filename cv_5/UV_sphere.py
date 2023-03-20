@@ -18,8 +18,8 @@ class Point:
 center = (0, 0)
 radius = 5
 
-num_meridians = 10
-num_parallels = 10
+num_meridians = 1000
+num_parallels = 1000
 
 
 def generate_sphere_points():
