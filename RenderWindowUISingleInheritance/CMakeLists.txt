@@ -11,6 +11,9 @@ PROJECT(RenderWindowUISingleInheritance)
 find_package(VTK COMPONENTS 
   CommonColor
   CommonCore
+  CommonDataModel
+  CommonTransforms
+  RenderingAnnotation
   FiltersSources
   InteractionStyle
   RenderingContextOpenGL2
@@ -20,6 +23,7 @@ find_package(VTK COMPONENTS
   RenderingOpenGL2
   GUISupportQt
   RenderingQt
+  IOLegacy
 )
 
 if(NOT VTK_FOUND)

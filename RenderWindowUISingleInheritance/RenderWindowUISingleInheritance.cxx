@@ -12,11 +12,20 @@
 #include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
 #include <vtkSphereSource.h>
+#include <vtkPolyDataReader.h>
 #include <vtkVersion.h>
+#include <vtkAxesActor.h>
+#include <vtkTransform.h>
+#include <QFile>
+#include <QDebug>
+
 
 #if VTK_VERSION_NUMBER >= 89000000000ULL
 #define VTK890 1
 #endif
+#include <vtkTextActor.h>
+
+
 
 namespace {
 /** Get a specialised lookup table for the platonic solids.
@@ -50,26 +59,35 @@ RenderWindowUISingleInheritance::RenderWindowUISingleInheritance(
 
   auto lut = GetPlatonicLUT();
 
-  vtkNew<vtkPlatonicSolidSource> source1, source2;
-  source1->SetSolidTypeToCube();
-  source2->SetSolidTypeToOctahedron();
+  std::string inputFile = "D:/Documents/tkramar/RenderWindowUISingleInheritance/UVSphere.vtk";
+  vtkNew<vtkPolyDataReader> reader;
+  reader->SetFileName("D:\\Documents\\tkramar\\RenderWindowUISingleInheritance\\ihlan.vtk");
+  reader->Update();
+  vtkSmartPointer<vtkPolyData> polyData;
+  polyData = reader->GetOutput();
 
-  vtkNew<vtkPolyDataMapper> mapper1, mapper2;
-  mapper1->SetInputConnection(source1->GetOutputPort());
-  mapper1->SetLookupTable(lut);
-  mapper1->SetScalarRange(0, 19);
-  mapper2->SetInputConnection(source2->GetOutputPort());
-  mapper2->SetLookupTable(lut);
-  mapper2->SetScalarRange(0, 19);
+  vtkNew<vtkPolyDataMapper> objectMapper;
+  objectMapper->SetInputData(polyData);
+  objectMapper->SetLookupTable(lut);
+  objectMapper->SetScalarRange(0, 19);
 
-  vtkNew<vtkActor> actor1, actor2;
-  actor1->SetMapper(mapper1);
-  actor2->SetMapper(mapper2);
-  actor1->SetPosition(1, 1, 1);
+  vtkNew<vtkActor> objectActor;
+  objectActor->SetMapper(objectMapper);
+
+  vtkNew<vtkTransform> transform;
+  transform->Translate(5, 5, 5);
+
+  vtkNew<vtkAxesActor> axesActor;
+  axesActor->SetUserTransform(transform);
+
+  vtkNew<vtkTextActor> textActor;
+  textActor->SetInput("Objekt");
+
 
   vtkNew<vtkRenderer> renderer;
-  renderer->AddActor(actor1);
-  renderer->AddActor(actor2);
+  renderer->AddActor(objectActor);
+  renderer->AddActor(axesActor);
+  renderer->AddActor(textActor);
   renderer->GetActiveCamera()->Azimuth(180.0);
   renderer->ResetCamera();
   renderer->SetBackground(colors->GetColor3d("SteelBlue").GetData());
