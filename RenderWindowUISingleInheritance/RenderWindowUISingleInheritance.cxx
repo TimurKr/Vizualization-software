@@ -19,32 +19,30 @@
 #include <QFile>
 #include <QDebug>
 
-
 #if VTK_VERSION_NUMBER >= 89000000000ULL
 #define VTK890 1
 #endif
 #include <vtkTextActor.h>
 
-
-
-namespace {
-/** Get a specialised lookup table for the platonic solids.
- *
- * Since each face of a vtkPlatonicSolidSource has a different
- * cell scalar, we create a lookup table with a different colour
- * for each face.
- * The colors have been carefully chosen so that adjacent cells
- * are colored distinctly.
- *
- * @return The lookup table.
- */
-vtkNew<vtkLookupTable> GetPlatonicLUT();
+namespace
+{
+  /** Get a specialised lookup table for the platonic solids.
+   *
+   * Since each face of a vtkPlatonicSolidSource has a different
+   * cell scalar, we create a lookup table with a different colour
+   * for each face.
+   * The colors have been carefully chosen so that adjacent cells
+   * are colored distinctly.
+   *
+   * @return The lookup table.
+   */
+  vtkNew<vtkLookupTable> GetPlatonicLUT();
 } // namespace
 
 // Constructor
 RenderWindowUISingleInheritance::RenderWindowUISingleInheritance(
-    QWidget* parent)
-  : QMainWindow(parent), ui(new Ui::RenderWindowUISingleInheritance)
+    QWidget *parent)
+    : QMainWindow(parent), ui(new Ui::RenderWindowUISingleInheritance)
 {
   this->ui->setupUi(this);
 
@@ -59,7 +57,6 @@ RenderWindowUISingleInheritance::RenderWindowUISingleInheritance(
 
   auto lut = GetPlatonicLUT();
 
-  std::string inputFile = "D:/Documents/tkramar/RenderWindowUISingleInheritance/UVSphere.vtk";
   vtkNew<vtkPolyDataReader> reader;
   reader->SetFileName("D:\\Documents\\tkramar\\RenderWindowUISingleInheritance\\ihlan.vtk");
   reader->Update();
@@ -68,8 +65,6 @@ RenderWindowUISingleInheritance::RenderWindowUISingleInheritance(
 
   vtkNew<vtkPolyDataMapper> objectMapper;
   objectMapper->SetInputData(polyData);
-  objectMapper->SetLookupTable(lut);
-  objectMapper->SetScalarRange(0, 19);
 
   vtkNew<vtkActor> objectActor;
   objectActor->SetMapper(objectMapper);
@@ -81,8 +76,12 @@ RenderWindowUISingleInheritance::RenderWindowUISingleInheritance(
   axesActor->SetUserTransform(transform);
 
   vtkNew<vtkTextActor> textActor;
-  textActor->SetInput("Objekt");
-
+  textActor->SetInput("Sphere");
+  vtkTextProperty *txtprop = textActor->GetTextProperty();
+  txtprop->SetFontFamilyToArial();
+  txtprop->BoldOn();
+  txtprop->SetFontSize(36);
+  textActor->SetDisplayPosition(20, 30);
 
   vtkNew<vtkRenderer> renderer;
   renderer->AddActor(objectActor);
@@ -116,21 +115,22 @@ void RenderWindowUISingleInheritance::slotExit()
   qApp->exit();
 }
 
-namespace {
-
-vtkNew<vtkLookupTable> GetPlatonicLUT()
+namespace
 {
-  vtkNew<vtkLookupTable> lut;
-  lut->SetNumberOfTableValues(20);
-  lut->SetTableRange(0.0, 19.0);
-  lut->Build();
-  lut->SetTableValue(0, 1, 1, 1);
-  lut->SetTableValue(1, 1, 1, 1);
-  lut->SetTableValue(2, 1, 1, 1);
-  lut->SetTableValue(3, 1, 1, 1);
-  lut->SetTableValue(4, 1, 1, 1);
-  lut->SetTableValue(5, 1, 1, 1);
-  return lut;
-}
+
+  vtkNew<vtkLookupTable> GetPlatonicLUT()
+  {
+    vtkNew<vtkLookupTable> lut;
+    lut->SetNumberOfTableValues(20);
+    lut->SetTableRange(0.0, 19.0);
+    lut->Build();
+    lut->SetTableValue(0, 1, 1, 1);
+    lut->SetTableValue(1, 1, 1, 1);
+    lut->SetTableValue(2, 1, 1, 1);
+    lut->SetTableValue(3, 1, 1, 1);
+    lut->SetTableValue(4, 1, 1, 1);
+    lut->SetTableValue(5, 1, 1, 1);
+    return lut;
+  }
 
 } // namespace

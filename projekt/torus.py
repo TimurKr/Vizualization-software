@@ -39,10 +39,8 @@ def generate_sphere_points():
         for y in range(num_y):
             alfa = 2 * pi * x / num_x
             beta = 2 * pi * y / num_y
-            points[x][y].x = (main_radius + radius *
-                              radius * sin(beta)) * cos(alfa)
-            points[x][y].y = (main_radius + radius *
-                              radius * sin(beta)) * sin(alfa)
+            points[x][y].x = (main_radius + radius * sin(beta)) * cos(alfa)
+            points[x][y].y = (main_radius + radius * sin(beta)) * sin(alfa)
             points[x][y].z = radius * cos(beta)
 
     polygons = []
